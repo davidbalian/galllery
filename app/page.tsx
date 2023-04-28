@@ -10,8 +10,9 @@ interface Photo {
   width: number;
   height: number;
   src: {
-    small: string;
+    medium: string;
     large: string;
+    large2x: string;
     original: string;
   };
   avg_color: string;
@@ -50,7 +51,7 @@ function Home() {
 
   const fetchPhotos = () => {
     client.photos
-      .curated({ per_page: 20, page: page }) // use the next page number
+      .curated({ per_page: 20, page }) // use the next page number
       .then((response: Photos | ErrorResponse) => {
         if ("photos" in response) {
           const data = response.photos.map((photo) => ({
@@ -59,8 +60,9 @@ function Home() {
             width: photo.width.toString(),
             height: photo.height.toString(),
             src: {
-              small: photo.src.small,
+              medium: photo.src.medium,
               large: photo.src.large,
+              large2x: photo.src.large2x,
               original: photo.src.original,
             },
             avg_color: photo.avg_color,
@@ -107,7 +109,11 @@ function Home() {
       {clickedImage && !closed && (
         <Modal
           {...clickedImage}
-          src={clickedImage.src.original}
+          src={{
+            medium: clickedImage.src.medium,
+            large2x: clickedImage.src.large2x,
+            original: clickedImage.src.original,
+          }}
           setClosed={setClosed}
         />
       )}
