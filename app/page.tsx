@@ -1,49 +1,116 @@
 "use client";
-
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { createClient, ErrorResponse, Photos } from "pexels";
+import Modal from "./Modal";
 
-type UnsplashImage = {
-  id: string;
-  alt_description: string;
+interface Photo {
+  id: number;
+  alt: string;
   width: number;
   height: number;
-  urls: {
+  src: {
     small: string;
+    large: string;
+    original: string;
   };
-};
+  avg_color: string;
+  photographer: string;
+  photographer_url: string;
+}
 
 function Home() {
-  const [images, setImages] = useState<UnsplashImage[]>([]);
+  const [images, setImages] = useState<Photo[]>([]);
+  const [page, setPage] = useState(1);
+  const [clickedImage, setClickedImage] = useState<Photo | null>(null);
+  const [closed, setClosed] = useState(false);
 
-  const accessKey = "A1gpClCtLT7VT-OiXKw8UjbXmoXo-fDAcSMeHSPAdmg";
-  const unsplashApiUrl = `https://api.unsplash.com/photos/random/?client_id=${accessKey}&count=30`;
+  const client = createClient(
+    "uIrgrxmRhN1mWGhaSx0bASeQvqUEHQbMxiqxl4ls5MbWm4LV3b5FMo28"
+  );
 
   useEffect(() => {
-    fetch(unsplashApiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        setImages(data);
-      })
-      .catch((error) => console.error(error));
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } =
+        document.documentElement;
+
+      if (scrollTop + clientHeight >= scrollHeight) {
+        fetchPhotos();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    fetchPhotos();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
+
+  const fetchPhotos = () => {
+    client.photos
+      .curated({ per_page: 20, page: page }) // use the next page number
+      .then((response: Photos | ErrorResponse) => {
+        if ("photos" in response) {
+          const data = response.photos.map((photo) => ({
+            id: photo.id.toString(),
+            alt: photo.alt,
+            width: photo.width.toString(),
+            height: photo.height.toString(),
+            src: {
+              small: photo.src.small,
+              large: photo.src.large,
+              original: photo.src.original,
+            },
+            avg_color: photo.avg_color,
+            photographer: photo.photographer,
+            photographer_url: photo.photographer_url,
+          }));
+          setImages((images) => [...images, ...data] as Photo[]);
+          setPage((page) => page + 1);
+        } else {
+          console.log(response);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleImageClick = (image: Photo) => {
+    setClickedImage(image);
+    setClosed(false);
+  };
 
   return (
     <div className="photos-wrapper">
       <div className="photos">
         {images.map((image) => (
-          <div className="photo-wrapper" key={image.id}>
+          <div
+            className="photo-wrapper"
+            key={image.id}
+            onClick={() => handleImageClick(image)}
+          >
             <div className="overlay"></div>
             <Image
-              src={image.urls.small}
+              src={image.src.large}
               loading="lazy"
-              alt={image.alt_description}
+              alt={image.alt}
               width={image.width}
               height={image.height}
+              className="photo"
             />
           </div>
         ))}
       </div>
+      {clickedImage && !closed && (
+        <Modal
+          {...clickedImage}
+          src={clickedImage.src.original}
+          setClosed={setClosed}
+        />
+      )}
     </div>
   );
 }
