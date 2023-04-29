@@ -171,10 +171,11 @@ header {
 .search-form {
   border: 1px solid rgb(218, 220, 224);
   border-radius: 24px;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.5);
   transition: 0.1s;
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .search-form:hover {
@@ -185,9 +186,10 @@ header {
   border: none;
   padding: 0.5rem 1rem;
   font-size: 1rem;
-  border-radius: 24px 0 0 24px;
+  border-radius: 24px;
   font-size: 14px;
   color: var(--dark-color);
+  background-color: transparent;
 }
 
 .ios-search-input {
@@ -207,11 +209,14 @@ header {
 .search-submit-btn {
   border: none;
   background-color: transparent;
-  padding: 0.5rem 1rem;
-  border-radius: 0 24px 24px 0;
+  border-radius: 24px;
   cursor: pointer;
   font-size: 18px;
   transition: 0.1s;
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .search-submit-btn:focus {
@@ -219,7 +224,7 @@ header {
 }
 
 .search-submit-btn:hover {
-  transform: scale(1.1);
+  opacity: 0.75;
 }
 
 @media (max-width: 1300px) {
@@ -264,5 +269,9 @@ header {
 
   .photos {
     grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .search-form {
+    width: 200px;
   }
 }
