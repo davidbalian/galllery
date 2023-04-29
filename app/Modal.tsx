@@ -31,10 +31,21 @@ const Modal = ({
   setClosed,
 }: Photo) => {
   const [hasLoaded, setHasLoaded] = React.useState(false);
+
+  const preventScroll = (event: TouchEvent) => {
+    event.preventDefault();
+  };
+
   useEffect(() => {
     document.body.style.overflowY = "hidden"; // Prevent scrolling when modal is open
+    document.body.addEventListener("touchmove", preventScroll, {
+      passive: false,
+    } as EventListenerOptions);
     return () => {
       document.body.style.overflowY = "auto";
+      document.body.removeEventListener("touchmove", preventScroll, {
+        passive: false,
+      } as EventListenerOptions);
       setHasLoaded(false); // Allow scrolling when modal is closed
     };
   }, []);
