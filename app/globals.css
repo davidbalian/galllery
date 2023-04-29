@@ -234,6 +234,10 @@ header {
 }
 
 @media (max-width: 764px) {
+  header {
+    justify-content: space-between;
+  }
+
   .modal-image {
     height: auto;
     width: 60%;
