@@ -45,10 +45,10 @@ function Search() {
 
     return {
       onTouchStart: (e: TouchEvent<HTMLInputElement>) => {
-        e.currentTarget.style.fontSize = "16px";
+        e.currentTarget.classList.add("ios-search-input");
       },
       onBlur: (e: FocusEvent<HTMLInputElement>) => {
-        e.currentTarget.style.fontSize = "";
+        e.currentTarget.classList.remove("ios-search-input");
       },
     };
   };
