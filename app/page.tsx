@@ -57,7 +57,7 @@ function Home() {
 
   const fetchPhotos = (page: number) => {
     client.photos
-      .curated({ per_page: 30, page: page })
+      .curated({ per_page: 20, page: page })
       .then((response: Photos | ErrorResponse) => {
         if ("photos" in response) {
           const data = response.photos.map((photo) => ({
