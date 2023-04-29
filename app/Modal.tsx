@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -45,24 +47,24 @@ const Modal = ({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.1 }}
-        style={{
-          background: `linear-gradient(to top right, ${avg_color}FF, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9))`,
-        }}
       >
-        <span
-          className="close"
+        <div
+          className="modal-background"
+          style={{
+            background: `linear-gradient(to top right, ${avg_color}FF, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9))`,
+          }}
           onClick={() => {
             setClosed(true);
           }}
-        >
-          &times;
-        </span>
+        ></div>
+
         {!hasLoaded && (
           <Image
             src={src.medium}
             alt={alt}
             width={width}
             height={height}
+            style={{ backgroundColor: avg_color }}
             className="modal-image"
           />
         )}

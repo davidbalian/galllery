@@ -93,14 +93,12 @@ header {
 
 .modal {
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   /* background-color: rgba(255, 255, 255, 0.85); */
-  backdrop-filter: blur(12px) saturate(180%) brightness(120%);
   z-index: 2;
-  transform: translate(-50%, -50%);
   border-radius: 1px;
   /* box-shadow: 0 0 0 100vw rgba(0, 0, 0, 0.75); */
   padding: 1rem 2rem 2rem 2rem;
@@ -108,20 +106,32 @@ header {
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
+  z-index: 2;
 }
 
-.modal .close {
-  cursor: pointer;
+.modal-background {
+  backdrop-filter: blur(12px) saturate(180%) brightness(120%);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.close {
   color: var(--dark-color);
-  font-size: 1.75rem;
-  transition: 0.1s;
-  position: absolute;
+  font-size: 3rem;
+  position: fixed;
   top: 1rem;
   right: 2rem;
+  z-index: 99;
 }
 
-.close:hover {
-  transform: scale(1.1);
+.close:hover,
+.arrow:hover {
+  opacity: 0.9;
+  cursor: pointer;
+  transition: 0.1s;
 }
 
 .modal-image {
@@ -132,5 +142,40 @@ header {
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 1px;
-  /* border: 100px solid white; */
+}
+
+.arrow {
+  font-size: 3rem;
+  color: var(--dark-color);
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 99;
+}
+
+.right-arrow {
+  right: 2rem;
+}
+
+.left-arrow {
+  left: 2rem;
+}
+
+@media (max-width: 1200px) {
+  .modal-image {
+    height: auto;
+    width: 60%;
+  }
+
+  .right-arrow {
+    right: 1rem;
+  }
+
+  .left-arrow {
+    left: 1rem;
+  }
+
+  .close {
+    right: 1rem;
+  }
 }
