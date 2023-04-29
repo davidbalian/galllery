@@ -96,7 +96,7 @@ function Home() {
         {hasSearched && (
           <p className="search-query">
             {resultsAmount > 0 ? resultsAmount : "No"} results for search{" "}
-            <strong>"{search}"</strong>
+            <strong>{`"${search}"`}</strong>
           </p>
         )}
         <div className="photos">
