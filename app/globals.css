@@ -135,7 +135,7 @@ header {
 }
 
 .modal-image {
-  position: absolute;
+  position: fixed;
   height: 38rem;
   width: auto;
   top: 50%;
