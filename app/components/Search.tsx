@@ -1,6 +1,13 @@
 "use client";
 
-import React, { FormEvent, useContext, useEffect, useState } from "react";
+import React, {
+  FormEvent,
+  useContext,
+  useEffect,
+  useState,
+  TouchEvent,
+  FocusEvent,
+} from "react";
 import { ImagesContext } from "../contexts/ImagesContext";
 import Photo from "../interfaces/Photo";
 import { SearchContext } from "../contexts/SearchContext";
@@ -17,6 +24,34 @@ function Search() {
   useEffect(() => {
     setResultsAmount(images.length);
   }, [images]);
+
+  const isIOS = () => {
+    if (typeof window !== "undefined") {
+      const win = window as any;
+      return (
+        (/iPad|iPhone|iPod/.test(navigator.platform) ||
+          (navigator.platform === "MacIntel" &&
+            navigator.maxTouchPoints > 1)) &&
+        !win.MSStream
+      );
+    }
+    return false;
+  };
+
+  const getIOSInputEventHandlers = () => {
+    if (isIOS()) {
+      return {};
+    }
+
+    return {
+      onTouchStart: (e: TouchEvent<HTMLInputElement>) => {
+        e.currentTarget.style.fontSize = "16px";
+      },
+      onBlur: (e: FocusEvent<HTMLInputElement>) => {
+        e.currentTarget.style.fontSize = "";
+      },
+    };
+  };
 
   const handleSearch = () => {
     // if search is empty, set images to original images
@@ -50,6 +85,7 @@ function Search() {
         type="text"
         placeholder="Search"
         className="search-input"
+        {...getIOSInputEventHandlers()}
         value={searchQuery}
         onClick={() => {
           counter === 0 && setOriginalImages(images);
