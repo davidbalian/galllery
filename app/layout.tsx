@@ -1,5 +1,6 @@
-import Header from "./Header";
-import { Context } from "./context";
+import Header from "./components/Header";
+import { ImagesState } from "./contexts/ImagesContext";
+import { SearchState } from "./contexts/SearchContext";
 import "./globals.css";
 
 export default function RootLayout({
@@ -11,10 +12,12 @@ export default function RootLayout({
     <html lang="en">
       <head />
       <body>
-        <Context>
-          <Header />
-          {children}
-        </Context>
+        <ImagesState>
+          <SearchState>
+            <Header />
+            {children}
+          </SearchState>
+        </ImagesState>
       </body>
     </html>
   );

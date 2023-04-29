@@ -2,16 +2,20 @@
 import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 import { createClient, ErrorResponse, Photos } from "pexels";
-import Modal from "./Modal";
+import Modal from "./components/Modal";
 import Photo from "./interfaces/Photo";
-import { ImagesContext } from "./context";
+import { ImagesContext } from "./contexts/ImagesContext";
+import { SearchContext } from "./contexts/SearchContext";
 
 function Home() {
   const { images, setImages } = useContext(ImagesContext);
-  const [page, setPage] = useState(1);
+  const { hasSearched } = useContext(SearchContext);
+  const { search } = useContext(SearchContext);
+  const [page, setPage] = useState(Math.floor(Math.random() * 9) + 2);
   const [i, setI] = useState(0);
   const [clickedImage, setClickedImage] = useState<Photo | null>(null);
   const [closed, setClosed] = useState(true);
+  const { resultsAmount } = useContext(SearchContext);
 
   const client = createClient(
     "uIrgrxmRhN1mWGhaSx0bASeQvqUEHQbMxiqxl4ls5MbWm4LV3b5FMo28"
@@ -36,18 +40,20 @@ function Home() {
         document.documentElement;
 
       if (scrollTop + clientHeight >= scrollHeight) {
-        fetchPhotos(page + 1); // use the next page number
+        setPage((page) => page + 1); // increment page number
       }
     };
 
     window.addEventListener("scroll", handleScrollDebounced);
 
-    fetchPhotos(1);
-
     return () => {
       window.removeEventListener("scroll", handleScrollDebounced);
     };
   }, []);
+
+  useEffect(() => {
+    !hasSearched && fetchPhotos(page);
+  }, [page]);
 
   const fetchPhotos = (page: number) => {
     client.photos
@@ -67,12 +73,8 @@ function Home() {
             },
             avg_color: photo.avg_color,
           }));
-          if (page === 1) {
-            setImages(data as Photo[]);
-          } else {
-            setImages((images) => [...images, ...data] as Photo[]);
-          }
-          setPage((page) => page + 1);
+
+          setImages((images) => [...images, ...data] as Photo[]);
         } else {
           console.log(response);
         }
@@ -91,6 +93,12 @@ function Home() {
   return (
     <>
       <div className="photos-wrapper">
+        {hasSearched && (
+          <p className="search-query">
+            {resultsAmount > 0 ? resultsAmount : "No"} results for search{" "}
+            <strong>"{search}"</strong>
+          </p>
+        )}
         <div className="photos">
           {images.map((image, index) => (
             <div

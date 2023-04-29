@@ -1,29 +1,39 @@
 "use client";
 
 import React, { FormEvent, useContext, useEffect, useState } from "react";
-import { ImagesContext } from "./context";
-import Photo from "./interfaces/Photo";
+import { ImagesContext } from "../contexts/ImagesContext";
+import Photo from "../interfaces/Photo";
+import { SearchContext } from "../contexts/SearchContext";
 
 function Search() {
-  const [search, setSearch] = useState("");
+  const { setSearch } = useContext(SearchContext);
+  const [searchQuery, setSearchQuery] = useState("");
+  const { setHasSearched } = useContext(SearchContext);
   const { images, setImages } = useContext(ImagesContext);
   const { originalImages, setOriginalImages } = useContext(ImagesContext);
+  const { setResultsAmount } = useContext(SearchContext);
   const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    setResultsAmount(images.length);
+  }, [images]);
 
   const handleSearch = () => {
     // if search is empty, set images to original images
-    if (search === "") {
+    if (searchQuery === "") {
       setImages(originalImages);
+      setHasSearched(false);
       return;
     } else {
       // filter images based on search
       const filteredImages = originalImages.filter((image: Photo) => {
-        return image.alt.toLowerCase().includes(search.toLowerCase());
+        return image.alt.toLowerCase().includes(searchQuery.toLowerCase());
       });
 
       setCounter((counter) => counter + 1);
-
+      setHasSearched(true);
       setImages(filteredImages);
+      setSearch(searchQuery);
     }
   };
 
@@ -40,12 +50,12 @@ function Search() {
         type="text"
         placeholder="Search"
         className="search-input"
-        value={search}
+        value={searchQuery}
         onClick={() => {
           counter === 0 && setOriginalImages(images);
         }}
         onChange={(e) => {
-          setSearch(e.target.value);
+          setSearchQuery(e.target.value);
         }}
       />
       <button type="submit" className="search-submit-btn">
