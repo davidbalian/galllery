@@ -1,27 +1,13 @@
 "use client";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { createClient, ErrorResponse, Photos } from "pexels";
 import Modal from "./Modal";
-
-interface Photo {
-  id: number;
-  alt: string;
-  width: number;
-  height: number;
-  src: {
-    medium: string;
-    large: string;
-    large2x: string;
-    original: string;
-  };
-  avg_color: string;
-  photographer: string;
-  photographer_url: string;
-}
+import Photo from "./interfaces/Photo";
+import { ImagesContext } from "./context";
 
 function Home() {
-  const [images, setImages] = useState<Photo[]>([]);
+  const { images, setImages } = useContext(ImagesContext);
   const [page, setPage] = useState(1);
   const [i, setI] = useState(0);
   const [clickedImage, setClickedImage] = useState<Photo | null>(null);
@@ -31,36 +17,48 @@ function Home() {
     "uIrgrxmRhN1mWGhaSx0bASeQvqUEHQbMxiqxl4ls5MbWm4LV3b5FMo28"
   );
 
+  let timeoutId: NodeJS.Timeout | null = null;
+
   useEffect(() => {
+    const handleScrollDebounced = () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+
+      timeoutId = setTimeout(() => {
+        handleScroll();
+        timeoutId = null;
+      }, 100);
+    };
+
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } =
         document.documentElement;
 
       if (scrollTop + clientHeight >= scrollHeight) {
-        // fetchPhotos();
-        console.log(images.length);
+        fetchPhotos(page + 1); // use the next page number
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScrollDebounced);
 
-    fetchPhotos();
+    fetchPhotos(1);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScrollDebounced);
     };
   }, []);
 
-  const fetchPhotos = () => {
+  const fetchPhotos = (page: number) => {
     client.photos
-      .curated({ per_page: 30, page }) // use the next page number
+      .curated({ per_page: 30, page: page })
       .then((response: Photos | ErrorResponse) => {
         if ("photos" in response) {
           const data = response.photos.map((photo) => ({
-            id: photo.id.toString(),
+            id: photo.id,
             alt: photo.alt,
-            width: photo.width.toString(),
-            height: photo.height.toString(),
+            width: photo.width,
+            height: photo.height,
             src: {
               medium: photo.src.medium,
               large: photo.src.large,
@@ -68,10 +66,12 @@ function Home() {
               original: photo.src.original,
             },
             avg_color: photo.avg_color,
-            photographer: photo.photographer,
-            photographer_url: photo.photographer_url,
           }));
-          setImages((images) => [...images, ...data] as Photo[]);
+          if (page === 1) {
+            setImages(data as Photo[]);
+          } else {
+            setImages((images) => [...images, ...data] as Photo[]);
+          }
           setPage((page) => page + 1);
         } else {
           console.log(response);

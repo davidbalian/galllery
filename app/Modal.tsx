@@ -15,21 +15,10 @@ interface Photo {
     original: string;
   };
   avg_color: string;
-  photographer: string;
-  photographer_url: string;
   setClosed: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Modal = ({
-  src,
-  alt,
-  width,
-  height,
-  avg_color,
-  photographer,
-  photographer_url,
-  setClosed,
-}: Photo) => {
+const Modal = ({ src, alt, width, height, avg_color, setClosed }: Photo) => {
   const [hasLoaded, setHasLoaded] = React.useState(false);
 
   const preventScroll = (event: TouchEvent) => {

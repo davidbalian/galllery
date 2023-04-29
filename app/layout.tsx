@@ -1,4 +1,5 @@
 import Header from "./Header";
+import { Context } from "./context";
 import "./globals.css";
 
 export default function RootLayout({
@@ -10,8 +11,10 @@ export default function RootLayout({
     <html lang="en">
       <head />
       <body>
-        <Header />
-        {children}
+        <Context>
+          <Header />
+          {children}
+        </Context>
       </body>
     </html>
   );
