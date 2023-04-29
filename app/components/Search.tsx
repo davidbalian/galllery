@@ -29,8 +29,8 @@ function Search() {
     if (typeof window !== "undefined") {
       const win = window as any;
       return (
-        (/iPad|iPhone|iPod/.test(navigator.platform) ||
-          (navigator.platform === "MacIntel" &&
+        (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+          (navigator.userAgent === "MacIntel" &&
             navigator.maxTouchPoints > 1)) &&
         !win.MSStream
       );
