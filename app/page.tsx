@@ -7,6 +7,7 @@ import { SearchContext } from "./contexts/SearchContext";
 import PhotosWrapper from "./components/PhotosWrapper";
 import fetchPhotos from "./functions/fetchPhotos";
 import ModalAndControls from "./components/ModalAndControls";
+import ScrollToTopBtn from "./components/ScrollToTopBtn";
 
 function Home() {
   const { images, setImages } = useContext(ImagesContext);
@@ -77,6 +78,7 @@ function Home() {
           images={images}
         />
       ) : null}
+      <ScrollToTopBtn />
     </>
   );
 }

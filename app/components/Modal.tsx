@@ -1,41 +1,60 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ModalProps from "../interfaces/ModalProps";
+import "../css/modal.css";
 
-interface Photo {
-  id: number;
-  alt: string;
-  width: number;
-  height: number;
-  src: {
-    medium: string;
-    large2x: string;
-    original: string;
-  };
-  avg_color: string;
-  setClosed: React.Dispatch<React.SetStateAction<boolean>>;
-}
+const Modal = ({
+  src,
+  alt,
+  width,
+  height,
+  avg_color,
+  setClosed,
+}: ModalProps) => {
+  // state to check whether the large image has loaded
+  const [hasLoaded, setHasLoaded] = useState(false);
 
-const Modal = ({ src, alt, width, height, avg_color, setClosed }: Photo) => {
-  const [hasLoaded, setHasLoaded] = React.useState(false);
+  // background gradient for modal
+  const modalBg = `linear-gradient(to top right, ${avg_color}FF, 
+    rgba(255, 255, 255, 0.9), 
+    rgba(255, 255, 255, 0.9), 
+    rgba(255, 255, 255, 0.9))`;
 
+  // prevent scrolling on mobile when modal is open
   const preventScroll = (event: TouchEvent) => {
     event.preventDefault();
   };
 
-  useEffect(() => {
-    document.body.style.overflowY = "hidden"; // Prevent scrolling when modal is open
+  // prevent scrolling on all devices when modal is open
+  const preventScrollOnOpen = () => {
+    // on pcs
+    document.body.style.overflowY = "hidden";
+
+    // on mobile
     document.body.addEventListener("touchmove", preventScroll, {
       passive: false,
     } as EventListenerOptions);
+  };
+
+  // allow scrolling on all devices when modal is closed
+  const allowScrollOnClose = () => {
+    // on pcs
+    document.body.style.overflowY = "auto";
+
+    // on mobile
+    document.body.removeEventListener("touchmove", preventScroll, {
+      passive: false,
+    } as EventListenerOptions);
+    setHasLoaded(false);
+  };
+
+  useEffect(() => {
+    preventScrollOnOpen();
     return () => {
-      document.body.style.overflowY = "auto";
-      document.body.removeEventListener("touchmove", preventScroll, {
-        passive: false,
-      } as EventListenerOptions);
-      setHasLoaded(false); // Allow scrolling when modal is closed
+      allowScrollOnClose();
     };
   }, []);
 
@@ -46,18 +65,19 @@ const Modal = ({ src, alt, width, height, avg_color, setClosed }: Photo) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.1 }}
+        transition={{ duration: 0.2 }}
       >
         <div
           className="modal-background"
           style={{
-            background: `linear-gradient(to top right, ${avg_color}FF, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9))`,
+            background: modalBg,
           }}
           onClick={() => {
             setClosed(true);
           }}
         ></div>
 
+        {/* show low res image while large image is loading*/}
         {!hasLoaded && (
           <Image
             src={src.medium}

@@ -1,0 +1,60 @@
+.scroll-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background-color: var(--dark-color);
+  color: var(--light-color);
+  border: none;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  cursor: pointer;
+  transition: 0.1s;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scroll-top-btn:hover {
+  transform: scale(1.05);
+}
+
+.scroll-top-btn:active {
+  transform: scale(0.95);
+}
+
+.scroll-top-btn p {
+  font-size: 2rem;
+  margin-bottom: -0.4rem;
+}
+
+.hide {
+  animation: show 0.5s 1 alternate;
+  transform: scale(0);
+}
+
+.show {
+  animation: hide 0.5s 1 alternate;
+  transform: scale(1);
+}
+
+@keyframes show {
+  from {
+    transition: scale(0);
+  }
+
+  to {
+    transition: scale(1);
+  }
+}
+
+@keyframes hide {
+  from {
+    transition: scale(1);
+  }
+
+  to {
+    transition: scale(0);
+  }
+}

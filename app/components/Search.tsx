@@ -1,57 +1,26 @@
 "use client";
 
-import React, {
-  FormEvent,
-  useContext,
-  useEffect,
-  useState,
-  TouchEvent,
-  FocusEvent,
-} from "react";
+import React, { FormEvent, useContext, useEffect, useState } from "react";
 import { ImagesContext } from "../contexts/ImagesContext";
 import Photo from "../interfaces/Photo";
 import { SearchContext } from "../contexts/SearchContext";
 
 function Search() {
+  // state from SearchContext
   const { setSearch } = useContext(SearchContext);
-  const [searchQuery, setSearchQuery] = useState("");
   const { setHasSearched } = useContext(SearchContext);
+  const { setResultsAmount } = useContext(SearchContext);
+
+  // state from ImagesContext
   const { images, setImages } = useContext(ImagesContext);
   const { originalImages, setOriginalImages } = useContext(ImagesContext);
-  const { setResultsAmount } = useContext(SearchContext);
+
+  const [searchQuery, setSearchQuery] = useState("");
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
     setResultsAmount(images.length);
   }, [images]);
-
-  const isIOS = () => {
-    if (typeof window !== "undefined") {
-      const win = window as any;
-      return (
-        (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
-          (navigator.userAgent === "MacIntel" &&
-            navigator.maxTouchPoints > 1)) &&
-        !win.MSStream
-      );
-    }
-    return false;
-  };
-
-  const getIOSInputEventHandlers = () => {
-    if (isIOS()) {
-      return {};
-    }
-
-    return {
-      onTouchStart: (e: TouchEvent<HTMLInputElement>) => {
-        e.currentTarget.classList.add("ios-search-input");
-      },
-      onBlur: (e: FocusEvent<HTMLInputElement>) => {
-        e.currentTarget.classList.remove("ios-search-input");
-      },
-    };
-  };
 
   const handleSearch = () => {
     // if search is empty, set images to original images
@@ -85,7 +54,6 @@ function Search() {
         type="text"
         placeholder="Search"
         className="search-input"
-        {...getIOSInputEventHandlers()}
         value={searchQuery}
         onClick={() => {
           counter === 0 && setOriginalImages(images);

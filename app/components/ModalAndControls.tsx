@@ -1,7 +1,8 @@
 import ModalAndControlsInterface from "../interfaces/ModalAndControlsInterface";
 import Modal from "./Modal";
 
-function ModalControls({
+// modal and controls for modal (right and left arrows, close button)
+function ModalAndControls({
   i,
   setI,
   clickedImage,
@@ -43,7 +44,6 @@ function ModalControls({
         src={{
           medium: clickedImage.src.medium,
           large2x: clickedImage.src.large2x,
-          original: clickedImage.src.original,
         }}
         setClosed={setClosed}
       />
@@ -51,4 +51,4 @@ function ModalControls({
   );
 }
 
-export default ModalControls;
+export default ModalAndControls;

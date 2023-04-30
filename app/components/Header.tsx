@@ -1,9 +1,11 @@
 import Search from "./Search";
+import "../css/header.css";
+import Logo from "./Logo";
 
 function Header() {
   return (
     <header>
-      <h1 className="logo">galllery</h1>
+      <Logo />
       <Search />
     </header>
   );
