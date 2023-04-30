@@ -1,11 +1,12 @@
 "use client";
-import Image from "next/image";
-import React, { useContext, useEffect, useState } from "react";
-import { createClient, ErrorResponse, Photos } from "pexels";
-import Modal from "./components/Modal";
+
+import { useContext, useEffect, useState } from "react";
 import Photo from "./interfaces/Photo";
 import { ImagesContext } from "./contexts/ImagesContext";
 import { SearchContext } from "./contexts/SearchContext";
+import PhotosWrapper from "./components/PhotosWrapper";
+import fetchPhotos from "./functions/fetchPhotos";
+import ModalAndControls from "./components/ModalAndControls";
 
 function Home() {
   const { images, setImages } = useContext(ImagesContext);
@@ -16,10 +17,6 @@ function Home() {
   const [clickedImage, setClickedImage] = useState<Photo | null>(null);
   const [closed, setClosed] = useState(true);
   const { resultsAmount } = useContext(SearchContext);
-
-  const client = createClient(
-    "uIrgrxmRhN1mWGhaSx0bASeQvqUEHQbMxiqxl4ls5MbWm4LV3b5FMo28"
-  );
 
   let timeoutId: NodeJS.Timeout | null = null;
 
@@ -52,37 +49,8 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    !hasSearched && fetchPhotos(page);
+    !hasSearched && fetchPhotos(page, setImages, images);
   }, [page]);
-
-  const fetchPhotos = (page: number) => {
-    client.photos
-      .curated({ per_page: 20, page: page })
-      .then((response: Photos | ErrorResponse) => {
-        if ("photos" in response) {
-          const data = response.photos.map((photo) => ({
-            id: photo.id,
-            alt: photo.alt,
-            width: photo.width,
-            height: photo.height,
-            src: {
-              medium: photo.src.medium,
-              large: photo.src.large,
-              large2x: photo.src.large2x,
-              original: photo.src.original,
-            },
-            avg_color: photo.avg_color,
-          }));
-
-          setImages((images) => [...images, ...data] as Photo[]);
-        } else {
-          console.log(response);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   const handleImageClick = (index: number) => {
     setClickedImage(images[index]);
@@ -92,72 +60,22 @@ function Home() {
 
   return (
     <>
-      <div className="photos-wrapper">
-        {hasSearched && (
-          <p className="search-query">
-            {resultsAmount > 0 ? resultsAmount : "No"} results for search{" "}
-            <strong>{`"${search}"`}</strong>
-          </p>
-        )}
-        <div className="photos">
-          {images.map((image, index) => (
-            <div
-              className="photo-wrapper"
-              key={image.id}
-              onClick={() => handleImageClick(index)}
-            >
-              <div className="overlay"></div>
-              <Image
-                src={image.src.large}
-                loading="lazy"
-                alt={image.alt}
-                width={image.width}
-                height={image.height}
-                className="photo"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
+      <PhotosWrapper
+        images={images}
+        handleImageClick={handleImageClick}
+        hasSearched={hasSearched}
+        resultsAmount={resultsAmount}
+        search={search}
+      />
       {clickedImage && !closed ? (
-        <>
-          <span
-            className="arrow left-arrow"
-            onClick={() => {
-              setI(i - 1);
-              setClickedImage(images[i - 1]);
-            }}
-          >
-            &#8592;
-          </span>
-          <span
-            className="arrow right-arrow"
-            onClick={() => {
-              setI(i + 1);
-              setClickedImage(images[i + 1]);
-            }}
-          >
-            &#8594;
-          </span>
-          <span
-            className="close"
-            onClick={() => {
-              setClosed(true);
-              setI(0);
-            }}
-          >
-            &times;
-          </span>
-          <Modal
-            {...clickedImage}
-            src={{
-              medium: clickedImage.src.medium,
-              large2x: clickedImage.src.large2x,
-              original: clickedImage.src.original,
-            }}
-            setClosed={setClosed}
-          />
-        </>
+        <ModalAndControls
+          i={i}
+          setI={setI}
+          clickedImage={clickedImage}
+          setClickedImage={setClickedImage}
+          setClosed={setClosed}
+          images={images}
+        />
       ) : null}
     </>
   );
