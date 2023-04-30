@@ -1,6 +1,7 @@
 import Image from "next/image";
 import PhotosWrapper from "../interfaces/PhotosWrapper";
 import "../css/photos.css";
+import "../globals.css";
 
 // photos wrapped div + all the images
 function PhotosWrapper({

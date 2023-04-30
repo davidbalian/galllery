@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ModalProps from "../interfaces/ModalProps";
 import "../css/modal.css";
+import "../globals.css";
 
 const Modal = ({
   src,

@@ -1,5 +1,6 @@
 import ModalAndControlsInterface from "../interfaces/ModalAndControlsInterface";
 import Modal from "./Modal";
+import "../globals.css";
 
 // modal and controls for modal (right and left arrows, close button)
 function ModalAndControls({

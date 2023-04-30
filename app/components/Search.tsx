@@ -4,6 +4,7 @@ import React, { FormEvent, useContext, useEffect, useState } from "react";
 import { ImagesContext } from "../contexts/ImagesContext";
 import Photo from "../interfaces/Photo";
 import { SearchContext } from "../contexts/SearchContext";
+import "../globals.css";
 
 function Search() {
   // state from SearchContext
