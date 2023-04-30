@@ -29,22 +29,6 @@ html {
     justify-content: space-between;
   }
 
-  .right-arrow {
-    right: 1rem;
-  }
-
-  .left-arrow {
-    left: 1rem;
-  }
-
-  .close {
-    right: 1rem;
-  }
-
-  .photos {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-
   .search-form {
     width: 200px;
   }
