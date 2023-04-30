@@ -28,6 +28,8 @@ const fetchPhotos = (
             large2x: photo.src.large2x,
           },
           avg_color: photo.avg_color,
+          photographer: photo.photographer,
+          photographer_url: photo.photographer_url,
         }));
 
         setImages((images) => [...images, ...data] as Photo[]);

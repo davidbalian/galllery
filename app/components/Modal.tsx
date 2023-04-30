@@ -13,6 +13,8 @@ const Modal = ({
   width,
   height,
   avg_color,
+  photographer,
+  photographer_url,
   setClosed,
 }: ModalProps) => {
   // state to check whether the large image has loaded
@@ -97,6 +99,19 @@ const Modal = ({
           className="modal-image"
           onLoad={() => setHasLoaded(true)}
         />
+        <div className="modal-info">
+          <p className="image-description">{alt ? alt : "No description"}</p>
+          <p className="photographer">
+            By {""}
+            <a
+              href={photographer_url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {photographer}
+            </a>
+          </p>
+        </div>
       </motion.div>
     </AnimatePresence>
   );

@@ -11,6 +11,8 @@ export default interface PhotosWrapper {
       original: string;
     };
     avg_color: string;
+    photographer: string;
+    photographer_url: string;
   }[];
   handleImageClick: (index: number) => void;
   hasSearched: boolean;

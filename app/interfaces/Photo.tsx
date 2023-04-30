@@ -10,4 +10,6 @@ export default interface Photo {
     original: string;
   };
   avg_color: string;
+  photographer: string;
+  photographer_url: string;
 }

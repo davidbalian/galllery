@@ -76,6 +76,28 @@
   left: 2rem;
 }
 
+.modal-info {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.image-description,
+.photographer,
+.photographer a {
+  color: var(--dark-color);
+  font-size: 14px;
+  text-align: center;
+  width: 100ch;
+}
+
 @media (max-width: 1300px) {
   .modal-image {
     height: auto;

@@ -11,5 +11,7 @@ export default interface ModalProps {
     large2x: string;
   };
   avg_color: string;
+  photographer: string;
+  photographer_url: string;
   setClosed: Dispatch<SetStateAction<boolean>>;
 }
