@@ -32,14 +32,14 @@ function Home() {
       timeoutId = setTimeout(() => {
         handleScroll();
         timeoutId = null;
-      }, 100);
+      }, 50);
     };
 
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } =
         document.documentElement;
 
-      if (scrollTop + clientHeight >= scrollHeight) {
+      if (scrollTop + clientHeight >= scrollHeight - 400) {
         setPage((page) => page + 1); // increment page number
       }
     };
