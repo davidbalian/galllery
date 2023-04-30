@@ -96,6 +96,7 @@
   font-size: 14px;
   text-align: center;
   width: 100ch;
+  max-width: 90vw;
 }
 
 @media (max-width: 1300px) {
