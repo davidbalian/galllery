@@ -14,7 +14,7 @@ const fetchPhotos = (
   images: Photo[]
 ) => {
   client.photos
-    .curated({ per_page: 20, page: page })
+    .curated({ per_page: 25, page: page })
     .then((response: Photos | ErrorResponse) => {
       if ("photos" in response) {
         const data = response.photos.map((photo) => ({
