@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion"; // Import Framer Motion
 import "../css/scrollTopBtn.css";
 
 function ScrollToTopBtn() {
@@ -22,16 +23,28 @@ function ScrollToTopBtn() {
     };
   });
 
+  // Define the Framer Motion variants for the button
+  const buttonVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+  };
+
   return (
-    <div
-      className={`scroll-top-btn ${show ? "show" : "hide"}`}
-      onClick={() => {
-        window.scrollTo(0, 0);
-        setShow(false);
-      }}
-    >
-      <p>&#8963;</p>
-    </div>
+    <>
+      <motion.div
+        className="scroll-top-btn"
+        initial="hidden"
+        animate={show ? "visible" : "hidden"}
+        variants={buttonVariants}
+        transition={{ duration: 0.1 }}
+        onClick={() => {
+          window.scrollTo(0, 0);
+          setShow(false);
+        }}
+      >
+        <motion.p>&#8963;</motion.p>
+      </motion.div>
+    </>
   );
 }
 

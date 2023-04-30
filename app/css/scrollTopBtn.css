@@ -20,41 +20,7 @@
   transform: scale(1.05);
 }
 
-.scroll-top-btn:active {
-  transform: scale(0.95);
-}
-
 .scroll-top-btn p {
   font-size: 2rem;
   margin-bottom: -0.4rem;
-}
-
-.hide {
-  animation: show 0.5s 1 alternate;
-  transform: scale(0);
-}
-
-.show {
-  animation: hide 0.5s 1 alternate;
-  transform: scale(1);
-}
-
-@keyframes show {
-  from {
-    transition: scale(0);
-  }
-
-  to {
-    transition: scale(1);
-  }
-}
-
-@keyframes hide {
-  from {
-    transition: scale(1);
-  }
-
-  to {
-    transition: scale(0);
-  }
 }
