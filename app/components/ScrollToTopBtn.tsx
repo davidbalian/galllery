@@ -27,6 +27,7 @@ function ScrollToTopBtn() {
       className={`scroll-top-btn ${show ? "show" : "hide"}`}
       onClick={() => {
         window.scrollTo(0, 0);
+        setShow(false);
       }}
     >
       <p>&#8963;</p>
